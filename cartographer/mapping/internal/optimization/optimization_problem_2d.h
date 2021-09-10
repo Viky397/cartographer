@@ -63,6 +63,9 @@ class OptimizationProblem2D
   OptimizationProblem2D& operator=(const OptimizationProblem2D&) = delete;
 
   void AddImuData(int trajectory_id, const sensor::ImuData& imu_data) override;
+
+  void AddLaserRemoveData(int trajectory_id, const sensor::PointCloud& laser_remove_data);
+
   void AddOdometryData(int trajectory_id,
                        const sensor::OdometryData& odometry_data) override;
   void AddTrajectoryNode(int trajectory_id,

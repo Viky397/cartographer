@@ -217,6 +217,23 @@ void PoseGraph2D::AddImuData(const int trajectory_id,
   });
 }
 
+void PoseGraph2D::AddLaserRemoveData(const int trajectory_id,
+									 const sensor::PointCloud& laser_remove_data,
+									 const SubmapId& submap_id) {
+  AddWorkItem([=]() LOCKS_EXCLUDED(mutex_) {
+    absl::MutexLock locker(&mutex_);
+    if (CanAddWorkItemModifying(trajectory_id)) {
+      optimization_problem_->AddLaserRemoveData(trajectory_id, laser_remove_data);
+    }
+
+    const auto submap_data = GetSubmapDataUnderLock(submap_id);
+    std::cout << submap_data.pose << std::endl;
+    std::cout << submap_data.submap << std::endl;
+
+    return WorkItem::Result::kDoNotRunOptimization;
+  });
+}
+
 void PoseGraph2D::AddOdometryData(const int trajectory_id,
                                   const sensor::OdometryData& odometry_data) {
   AddWorkItem([=]() LOCKS_EXCLUDED(mutex_) {
@@ -293,6 +310,8 @@ void PoseGraph2D::ComputeConstraint(const NodeId& node_id,
     constant_data = data_.trajectory_nodes.at(node_id).constant_data.get();
     submap = static_cast<const Submap2D*>(
         data_.submap_data.at(submap_id).submap.get());
+    std::cout << submap << std::endl;
+
   }
 
   if (maybe_add_local_constraint) {

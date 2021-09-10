@@ -179,6 +179,10 @@ void OptimizationProblem2D::AddImuData(const int trajectory_id,
   // interface.
 }
 
+void OptimizationProblem2D::AddLaserRemoveData(const int trajectory_id,
+                                       	   	   const sensor::PointCloud& laser_remove_data) {
+}
+
 void OptimizationProblem2D::AddOdometryData(
     const int trajectory_id, const sensor::OdometryData& odometry_data) {
   odometry_data_.Append(trajectory_id, odometry_data);

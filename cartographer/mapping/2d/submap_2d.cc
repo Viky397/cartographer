@@ -177,10 +177,12 @@ std::unique_ptr<RangeDataInserterInterface>
 ActiveSubmaps2D::CreateRangeDataInserter() {
   switch (options_.range_data_inserter_options().range_data_inserter_type()) {
     case proto::RangeDataInserterOptions::PROBABILITY_GRID_INSERTER_2D:
+      std::cout << "Using: PROB_GRID" << std::endl;
       return absl::make_unique<ProbabilityGridRangeDataInserter2D>(
           options_.range_data_inserter_options()
               .probability_grid_range_data_inserter_options_2d());
     case proto::RangeDataInserterOptions::TSDF_INSERTER_2D:
+      std::cout << "Using: TSDF" << std::endl;
       return absl::make_unique<TSDFRangeDataInserter2D>(
           options_.range_data_inserter_options()
               .tsdf_range_data_inserter_options_2d());

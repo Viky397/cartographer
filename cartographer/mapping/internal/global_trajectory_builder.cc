@@ -62,6 +62,7 @@ class GlobalTrajectoryBuilder : public mapping::TrajectoryBuilderInterface {
         matching_result = local_trajectory_builder_->AddRangeData(
             sensor_id, timed_point_cloud_data);
     if (matching_result == nullptr) {
+
       // The range data has not been fully accumulated yet.
       return;
     }

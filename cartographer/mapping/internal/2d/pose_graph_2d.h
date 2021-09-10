@@ -85,6 +85,15 @@ class PoseGraph2D : public PoseGraph {
 
   void AddImuData(int trajectory_id, const sensor::ImuData& imu_data) override
       LOCKS_EXCLUDED(mutex_);
+
+  void AddLaserRemoveData(const int trajectory_id,
+			 const sensor::PointCloud& laser_remove_data,
+			 const SubmapId& submap_id)
+      LOCKS_EXCLUDED(mutex_);
+
+  void RemoveSectionsOfSubmap(int trajectory_id, const sensor::PointCloud& laser_remove_data)
+      LOCKS_EXCLUDED(mutex_);
+
   void AddOdometryData(int trajectory_id,
                        const sensor::OdometryData& odometry_data) override
       LOCKS_EXCLUDED(mutex_);
