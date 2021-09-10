@@ -227,8 +227,8 @@ void PoseGraph2D::AddLaserRemoveData(const int trajectory_id,
     }
 
     const auto submap_data = GetSubmapDataUnderLock(submap_id);
-    std::cout << submap_data.pose << std::endl;
-    std::cout << submap_data.submap << std::endl;
+    std::cout << "Pose: " << submap_data.pose << std::endl;
+    std::cout << "Submap: " << submap_data.submap << std::endl;
 
     return WorkItem::Result::kDoNotRunOptimization;
   });
@@ -310,8 +310,6 @@ void PoseGraph2D::ComputeConstraint(const NodeId& node_id,
     constant_data = data_.trajectory_nodes.at(node_id).constant_data.get();
     submap = static_cast<const Submap2D*>(
         data_.submap_data.at(submap_id).submap.get());
-    std::cout << submap << std::endl;
-
   }
 
   if (maybe_add_local_constraint) {
@@ -1117,6 +1115,9 @@ PoseGraph2D::GetAllSubmapPoses() const {
   MapById<SubmapId, SubmapPose> submap_poses;
   for (const auto& submap_id_data : data_.submap_data) {
     auto submap_data = GetSubmapDataUnderLock(submap_id_data.id);
+//    std::cout << "Pose: " << submap_data.pose.DebugString() << std::endl;
+//    std::cout << "Submap: " << submap_data.submap << std::endl;
+
     submap_poses.Insert(
         submap_id_data.id,
         PoseGraph::SubmapPose{submap_data.submap->num_range_data(),
