@@ -221,7 +221,7 @@ void PoseGraph2D::AddLaserRemoveData(const int trajectory_id,
 									 const sensor::TimedPointCloud& laser_remove_data,
 									 const SubmapId& submap_id) {
     {absl::MutexLock locker(&mutex_);
-//    if (CanAddWorkItemModifying(trajectory_id)) {
+//    if (CanAddWorkItemModifying(trajectory_Tid)) {
 //      optimization_problem_->AddLaserRemoveData(trajectory_id, laser_remove_data);
 //    }
 
