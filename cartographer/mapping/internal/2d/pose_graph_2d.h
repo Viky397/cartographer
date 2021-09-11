@@ -87,12 +87,11 @@ class PoseGraph2D : public PoseGraph {
       LOCKS_EXCLUDED(mutex_);
 
   void AddLaserRemoveData(const int trajectory_id,
-			 const sensor::TimedPointCloud& laser_remove_data,
-			 const SubmapId& submap_id)
+			 const sensor::TimedPointCloudData& laser_remove_data) override
       LOCKS_EXCLUDED(mutex_);
 
-  void RemoveSectionsOfSubmap(int trajectory_id, const sensor::PointCloud& laser_remove_data)
-      LOCKS_EXCLUDED(mutex_);
+//  void RemoveSectionsOfSubmap(int trajectory_id, const sensor::PointCloud& laser_remove_data) override
+//      LOCKS_EXCLUDED(mutex_);
 
   void AddOdometryData(int trajectory_id,
                        const sensor::OdometryData& odometry_data) override

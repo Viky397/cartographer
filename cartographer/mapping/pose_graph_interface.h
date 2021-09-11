@@ -24,6 +24,7 @@
 #include "cartographer/mapping/id.h"
 #include "cartographer/mapping/submaps.h"
 #include "cartographer/transform/rigid_transform.h"
+#include "cartographer/sensor/timed_point_cloud_data.h"
 
 namespace cartographer {
 namespace mapping {
@@ -95,6 +96,9 @@ class PoseGraphInterface {
 
   // Waits for all computations to finish and computes optimized poses.
   virtual void RunFinalOptimization() = 0;
+
+  virtual void AddLaserRemoveData(const int trajectory_id,
+			 const sensor::TimedPointCloudData& laser_remove_data){};
 
   // Returns data for all submaps.
   virtual MapById<SubmapId, SubmapData> GetAllSubmapData() const = 0;
