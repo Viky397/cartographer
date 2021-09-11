@@ -218,13 +218,13 @@ void PoseGraph2D::AddImuData(const int trajectory_id,
 }
 
 void PoseGraph2D::AddLaserRemoveData(const int trajectory_id,
-									 const sensor::PointCloud& laser_remove_data,
+									 const sensor::TimedPointCloud& laser_remove_data,
 									 const SubmapId& submap_id) {
   AddWorkItem([=]() LOCKS_EXCLUDED(mutex_) {
     absl::MutexLock locker(&mutex_);
-    if (CanAddWorkItemModifying(trajectory_id)) {
-      optimization_problem_->AddLaserRemoveData(trajectory_id, laser_remove_data);
-    }
+//    if (CanAddWorkItemModifying(trajectory_id)) {
+//      optimization_problem_->AddLaserRemoveData(trajectory_id, laser_remove_data);
+//    }
 
     const auto submap_data = GetSubmapDataUnderLock(submap_id);
     std::cout << "Pose: " << submap_data.pose << std::endl;
