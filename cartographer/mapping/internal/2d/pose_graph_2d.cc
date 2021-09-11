@@ -37,6 +37,10 @@
 #include "cartographer/sensor/internal/voxel_filter.h"
 #include "cartographer/transform/transform.h"
 #include "glog/logging.h"
+#include "cartographer/mapping/2d/probability_grid_range_data_inserter_2d.h"
+#include "cartographer/mapping/2d/submap_2d.h"
+#include "cartographer/transform/transform.h"
+#include "cartographer/transform/rigid_transform.h"
 
 namespace cartographer {
 namespace mapping {
@@ -219,17 +223,36 @@ void PoseGraph2D::AddImuData(const int trajectory_id,
 
 void PoseGraph2D::AddLaserRemoveData(const int trajectory_id,
 									 const sensor::TimedPointCloudData& laser_remove_data) {
-//    if (CanAddWorkItemModifying(trajectory_Tid)) {
-//      optimization_problem_->AddLaserRemoveData(trajectory_id, laser_remove_data);
-//    }
+
 	MapById<SubmapId, PoseGraphInterface::SubmapData> submap_data = GetAllSubmapData();
 	MapById<SubmapId, SubmapPose> submap_poses = GetAllSubmapPoses();
-//    std::cout << "Pose: " << submap_data << std::endl;
-//    std::cout << "Submap: " << submap_poses << std::endl;
-	  std::cout << "AddLaserRemoveData: " <<  std::endl;
 
-//    {absl::MutexLock locker(&mutex_);
-//  };
+	// From pose_graph_2d_test.cc
+	sensor::PointCloud point_cloud_;
+	std::unique_ptr<ActiveSubmaps2D> active_submaps_;
+	transform::Rigid2d current_pose_;
+	const transform::Rigid2d pose_estimate = current_pose_;
+
+    const sensor::PointCloud new_point_cloud = sensor::TransformPointCloud(
+        point_cloud_,
+        transform::Embed3D(current_pose_.inverse().cast<float>()));
+
+	const sensor::RangeData range_data{
+	        Eigen::Vector3f::Zero(), new_point_cloud, {}};
+
+	active_submaps_->InsertRangeData(TransformRangeData(
+	        range_data, transform::Embed3D(pose_estimate.cast<float>())));
+
+	// Probability_grid_data_inserter_2d.cc
+	ProbabilityGrid* probability_grid;
+	const std::vector<uint16> hit_table;
+	constexpr int kSubpixelScale = 1000;
+	std::vector<Eigen::Array2i> ends;
+
+	probability_grid->ApplyLookupTable(ends.back() / kSubpixelScale, hit_table);
+
+	std::cout << "AddLaserRemoveData: " <<  std::endl;
+
 }
 
 void PoseGraph2D::AddOdometryData(const int trajectory_id,
@@ -1104,6 +1127,8 @@ PoseGraphInterface::SubmapData PoseGraph2D::GetSubmapData(
 MapById<SubmapId, PoseGraphInterface::SubmapData>
 PoseGraph2D::GetAllSubmapData() const {
   absl::MutexLock locker(&mutex_);
+  std::cout << "GetAllSubmapData: " <<  std::endl;
+
   return GetSubmapDataUnderLock();
 }
 
@@ -1154,6 +1179,8 @@ PoseGraphInterface::SubmapData PoseGraph2D::GetSubmapDataUnderLock(
   if (it == data_.submap_data.end()) {
     return {};
   }
+  std::cout << "Get Submap Data Under lock 2: " <<  std::endl;
+
   auto submap = it->data.submap;
   if (data_.global_submap_poses_2d.Contains(submap_id)) {
     // We already have an optimized pose.
@@ -1319,6 +1346,8 @@ void PoseGraph2D::TrimmingHandle::TrimSubmap(const SubmapId& submap_id) {
 MapById<SubmapId, PoseGraphInterface::SubmapData>
 PoseGraph2D::GetSubmapDataUnderLock() const {
   MapById<SubmapId, PoseGraphInterface::SubmapData> submaps;
+  std::cout << "GetSubmapDataUnderLock: " <<  std::endl;
+
   for (const auto& submap_id_data : data_.submap_data) {
     submaps.Insert(submap_id_data.id,
                    GetSubmapDataUnderLock(submap_id_data.id));

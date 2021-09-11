@@ -107,6 +107,8 @@ LocalTrajectoryBuilder2D::AddRangeData(
     const sensor::TimedPointCloudData& unsynchronized_data) {
   auto synchronized_data =
       range_data_collator_.AddRangeData(sensor_id, unsynchronized_data);
+  std::cout << "LocalTrajectoryBuilder2D::AddRangeData" << std::endl;
+
   if (synchronized_data.ranges.empty()) {
     LOG(INFO) << "Range data collator filling buffer.";
     return nullptr;
@@ -286,6 +288,8 @@ LocalTrajectoryBuilder2D::InsertIntoSubmap(
   if (motion_filter_.IsSimilar(time, pose_estimate)) {
     return nullptr;
   }
+  std::cout << "LocalTrajectoryBuilder2D::InsertIntoSubmap" << std::endl;
+
   std::vector<std::shared_ptr<const Submap2D>> insertion_submaps =
       active_submaps_.InsertRangeData(range_data_in_local);
   return absl::make_unique<InsertionResult>(InsertionResult{
