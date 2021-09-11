@@ -220,8 +220,7 @@ void PoseGraph2D::AddImuData(const int trajectory_id,
 void PoseGraph2D::AddLaserRemoveData(const int trajectory_id,
 									 const sensor::TimedPointCloud& laser_remove_data,
 									 const SubmapId& submap_id) {
-  AddWorkItem([=]() LOCKS_EXCLUDED(mutex_) {
-    absl::MutexLock locker(&mutex_);
+    {absl::MutexLock locker(&mutex_);
 //    if (CanAddWorkItemModifying(trajectory_id)) {
 //      optimization_problem_->AddLaserRemoveData(trajectory_id, laser_remove_data);
 //    }
@@ -230,8 +229,7 @@ void PoseGraph2D::AddLaserRemoveData(const int trajectory_id,
     std::cout << "Pose: " << submap_data.pose << std::endl;
     std::cout << "Submap: " << submap_data.submap << std::endl;
 
-    return WorkItem::Result::kDoNotRunOptimization;
-  });
+  };
 }
 
 void PoseGraph2D::AddOdometryData(const int trajectory_id,

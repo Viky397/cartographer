@@ -214,6 +214,7 @@ LocalTrajectoryBuilder2D::AddAccumulatedRangeData(
     const sensor::RangeData& gravity_aligned_range_data,
     const transform::Rigid3d& gravity_alignment,
     const absl::optional<common::Duration>& sensor_duration) {
+  std::cout << "LocalTrajectoryBuilder2D::AddAccumulatedRangeData" << std::endl;
   if (gravity_aligned_range_data.returns.empty()) {
     LOG(WARNING) << "Dropped empty horizontal range data.";
     return nullptr;
