@@ -243,9 +243,12 @@ void PoseGraph2D::AddLaserRemoveData(const int trajectory_id,
 	active_submaps_->InsertRangeData(TransformRangeData(
 	        range_data, transform::Embed3D(pose_estimate.cast<float>())));
 
-	// Probability_grid_data_inserter_2d.cc
-	ProbabilityGrid* probability_grid;
-	const std::vector<uint16> hit_table;
+	// Probability_grid_range_data_inserter_2d.cc
+
+	const proto::Submap2D& proto;
+	grid = absl::make_unique<ProbabilityGrid>(proto.grid(), conversion_tables_);
+//	GridInterface* const grid;
+	ProbabilityGrid* const probability_grid = static_cast<ProbabilityGrid*>(grid);	const std::vector<uint16> hit_table;
 	constexpr int kSubpixelScale = 1000;
 	std::vector<Eigen::Array2i> ends;
 

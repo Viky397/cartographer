@@ -63,6 +63,8 @@ bool ProbabilityGrid::ApplyLookupTable(const Eigen::Array2i& cell_index,
   if (*cell >= kUpdateMarker) {
     return false;
   }
+  std::cout << "Apply Lookup Table" <<  std::endl;
+
   mutable_update_indices()->push_back(flat_index);
   *cell = table[*cell];
   DCHECK_GE(*cell, kUpdateMarker);
